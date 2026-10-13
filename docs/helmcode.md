@@ -18,7 +18,8 @@ dashboard in Chrome. The provider is disabled by default and is not widget-selec
 
 Automatic cookie source tries Cloud first, then NaN when no Cloud session is available or Cloud rejects it. A quota
 parse error, rate limit, or server failure stops the refresh instead of switching accounts. Sessions are cached in
-separate Keychain scopes by requested cookie domain; rejected sessions are conditionally evicted without erasing
+separate Keychain scopes by requested cookie domain (`cloud-api.helmcode.com` for Cloud, `nan.builders` for NaN);
+rejected sessions are conditionally evicted without erasing
 another tenant or a newer session. The Usage Dashboard action follows the tenant of the displayed successful snapshot.
 If browser access is suppressed or denied and neither tenant succeeds, the error explains how to retry permission
 with Refresh in the provider menu or use Manual cookies. Background refreshes never request Keychain permission.

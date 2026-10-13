@@ -32,13 +32,13 @@ defineProvider({
   endpoints: ["https://cloud-api.helmcode.com", "https://cloud-api.nan.builders"],
   settings: [{ key: "TENANT", title: "Manual cookie tenant", type: "plain" }],
   capabilities: ["browser-cookies", "http-status"],
-  cookieDomains: ["helmcode.com", "nan.builders"],
+  cookieDomains: ["cloud-api.helmcode.com", "nan.builders"],
   async fetchUsage(ctx) {
     const tenants = [
-      { domain: "helmcode.com", name: "Helmcode Cloud" },
-      { domain: "nan.builders", name: "NaN Builders" },
+      { domain: "helmcode.com", cookieDomain: "cloud-api.helmcode.com", name: "Helmcode Cloud" },
+      { domain: "nan.builders", cookieDomain: "nan.builders", name: "NaN Builders" },
     ];
-    const policy = ctx.browser.availability(tenants[0].domain);
+    const policy = ctx.browser.availability(tenants[0].cookieDomain);
     if (policy === "off") throw ctx.fail.missingCredential("Helmcode dashboard cookies are disabled.");
     // A pasted header has no origin metadata. Never try it against both tenants.
     const candidates = policy === "manual" ? [tenants[ctx.settings.get("TENANT") === "nanBuilders" ? 1 : 0]] : tenants;
@@ -81,7 +81,7 @@ defineProvider({
     for (const tenant of candidates) {
       let cookie;
       try {
-        cookie = await ctx.browser.cookieHeader(tenant.domain);
+        cookie = await ctx.browser.cookieHeader(tenant.cookieDomain);
       } catch (error) {
         void error;
         continue;
@@ -95,7 +95,7 @@ defineProvider({
         ctx.http.get(`https://cloud-api.${tenant.domain}${path}`, { headers, timeoutSeconds });
       const response = await get("/api/usage/quota");
       if ((response.status >= 300 && response.status < 400) || response.status === 401 || response.status === 403) {
-        ctx.browser.rejectCookie(tenant.domain);
+        ctx.browser.rejectCookie(tenant.cookieDomain);
         rejected = true;
         continue;
       }

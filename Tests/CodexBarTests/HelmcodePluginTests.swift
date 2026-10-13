@@ -7,10 +7,22 @@ struct HelmcodePluginTests {
 
     @Test(arguments: BundledPluginTestSupport.engines)
     func `a denied Cloud import still permits a usable NaN session`(engine: ProviderPluginEngineKind) async throws {
-        let result = try await Self.fetch(engine: engine, denied: ["helmcode.com"])
+        let result = try await Self.fetch(engine: engine, denied: ["cloud-api.helmcode.com"])
         #expect(result.usage.identity?.accountOrganization == "NaN Builders")
-        #expect(result.domains == ["helmcode.com", "nan.builders"])
+        #expect(result.domains == ["cloud-api.helmcode.com", "nan.builders"])
         #expect(result.requests.allSatisfy { $0.url?.host == "cloud-api.nan.builders" })
+    }
+
+    @Test(arguments: BundledPluginTestSupport.engines)
+    func `Cloud imports its API host session without a parent domain cookie`(
+        engine: ProviderPluginEngineKind) async throws
+    {
+        let result = try await Self.fetch(engine: engine, available: ["cloud-api.helmcode.com"])
+
+        #expect(result.domains == ["cloud-api.helmcode.com"])
+        #expect(result.usage.identity?.accountOrganization == "Helmcode Cloud")
+        #expect(result.requests.count == 3)
+        #expect(result.requests.allSatisfy { $0.url?.host == "cloud-api.helmcode.com" })
     }
 
     @Test(arguments: BundledPluginTestSupport.engines)
@@ -27,7 +39,7 @@ struct HelmcodePluginTests {
         #expect(usage.identity?.accountOrganization == "Helmcode Cloud")
         #expect(usage.dataConfidence == .exact)
         #expect(result.requests.count == 3)
-        #expect(result.domains == ["helmcode.com"])
+        #expect(result.domains == ["cloud-api.helmcode.com"])
         #expect(HelmcodeProviderDescriptor.dashboardURL(snapshot: usage).absoluteString
             == "https://cloud.helmcode.com/dashboard")
     }
@@ -68,8 +80,8 @@ struct HelmcodePluginTests {
         engine: ProviderPluginEngineKind) async throws
     {
         let result = try await Self.fetch(engine: engine, cloudStatus: status)
-        #expect(result.rejected == ["helmcode.com"])
-        #expect(result.domains == ["helmcode.com", "nan.builders"])
+        #expect(result.rejected == ["cloud-api.helmcode.com"])
+        #expect(result.domains == ["cloud-api.helmcode.com", "nan.builders"])
         #expect(result.usage.identity?.accountOrganization == "NaN Builders")
         #expect(result.requests.count == 3)
     }
@@ -166,7 +178,7 @@ struct HelmcodePluginTests {
         engine: ProviderPluginEngineKind,
         source: ProviderCookieSource = .auto,
         tenant: String = "helmcode",
-        available: Set<String> = ["helmcode.com", "nan.builders"],
+        available: Set<String> = ["cloud-api.helmcode.com", "nan.builders"],
         denied: Set<String> = [],
         cloudStatus: Int = 200,
         quota: String? = nil,
@@ -183,7 +195,8 @@ struct HelmcodePluginTests {
         let transport = ProviderHTTPTransportStub { request in
             let url = try #require(request.url)
             let domain = url.host == "cloud-api.helmcode.com" ? "helmcode.com" : "nan.builders"
-            #expect(request.value(forHTTPHeaderField: "Cookie") == "session=\(domain)")
+            let cookieDomain = domain == "helmcode.com" ? "cloud-api.helmcode.com" : domain
+            #expect(request.value(forHTTPHeaderField: "Cookie") == "__Host-session=\(cookieDomain)")
             #expect(request.value(forHTTPHeaderField: "Origin") == "https://cloud.\(domain)")
             #expect(request.value(forHTTPHeaderField: "Referer") == "https://cloud.\(domain)/dashboard")
             #expect(request.timeoutInterval == (url.path == "/api/usage/quota" ? 8 : 2))
@@ -214,7 +227,7 @@ struct HelmcodePluginTests {
                 if denied
                     .contains(domain) { throw ProviderPluginError.secretAccess("Synthetic cookie permission denial") }
                 guard available.contains(domain) else { throw ProviderPluginError.secretAccess("missing fixture") }
-                return "session=\(domain)"
+                return "__Host-session=\(domain)"
             })
         return await (usage, transport.requests(), domains.values, rejected.values)
     }
