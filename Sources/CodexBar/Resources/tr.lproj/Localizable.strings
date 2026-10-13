@@ -1412,6 +1412,7 @@
 "menu_bar_layout_preset_icon_only" = "Yalnızca simge";
 "menu_bar_layout_preset_percent_reset" = "Yüzde ve sıfırlama";
 "menu_bar_layout_preset_compact_stacked" = "Kompakt yığın";
+"menu_bar_layout_preset_bars_stacked" = "İstiflenmiş ilerleme çubukları";
 "menu_bar_layout_preset_custom" = "Özel";
 "menu_bar_layout_live_preview" = "Canlı önizleme";
 "menu_bar_layout_default_preview" = "Varsayılan düzen önizlemesi";
@@ -1551,6 +1552,7 @@
 "5-hour usage" = "5 saatlik kullanım";
 "7-day usage" = "7 günlük kullanım";
 "Total usage" = "Toplam kullanım";
+"claude_oauth_keychain_access_disabled" = "Keychain erişimi devre dışı olduğundan CodexBar, Claude oturum açma bilgilerini okuyamıyor.";
 "claude_oauth_keychain_access_revoked" = "Claude Anahtar Zinciri erişimi, Claude Code'un token yenilemesi nedeniyle iptal edildi. Erişimi yeniden vermek için Yenile'ye tıklayın veya Claude kullanım kaynağını CLI/Web olarak değiştirin.";
 "claude_showing_last_known_usage" = "Bilinen son kullanım gösteriliyor (yakalanma zamanı: %@).";
 "claude_limited_usage_detail" = "Kullanım ayrıntıları sınırlı";
@@ -2519,6 +2521,10 @@
 "ak_…" = "ak_…";
 "ws_…" = "ws_…";
 
+"Plan renewal / expiry" = "Plan yenileme / sona erme";
+
+"Hidden by the global optional credits, spending & billing setting." = "İsteğe bağlı krediler, harcamalar ve faturalandırma için genel ayar tarafından gizlendi.";
+
 "Provider order updated" = "Sağlayıcı sırası güncellendi";
 "Undo" = "Geri al";
 "Clear filters" = "Filtreleri temizle";
@@ -2527,3 +2533,6 @@
 "Only enabled providers" = "Yalnızca etkin sağlayıcılar";
 "Restore default order" = "Varsayılan sırayı geri yükle";
 "Also restores the provider order in the menu bar. Can be undone." = "Menü çubuğundaki sağlayıcı sırasını da geri yükler. Geri alınabilir.";
+
+"Auto uses an API key when configured, otherwise browser cookies." = "Auto uses an API key when configured, otherwise browser cookies.";
+"Stored in the CodexBar config file. You can also set COMMAND_CODE_API_KEY." = "Stored in the CodexBar config file. You can also set COMMAND_CODE_API_KEY.";

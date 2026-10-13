@@ -1410,6 +1410,7 @@
 "menu_bar_layout_preset_icon_only" = "Icône uniquement";
 "menu_bar_layout_preset_percent_reset" = "Pourcentage et réinitialisation";
 "menu_bar_layout_preset_compact_stacked" = "Empilement compact";
+"menu_bar_layout_preset_bars_stacked" = "Barres de progression empilées";
 "menu_bar_layout_preset_custom" = "Personnalisé";
 "menu_bar_layout_live_preview" = "Aperçu en direct";
 "menu_bar_layout_default_preview" = "Aperçu de la disposition par défaut";
@@ -1549,6 +1550,7 @@
 "5-hour usage" = "Utilisation sur 5 heures";
 "7-day usage" = "Utilisation sur 7 jours";
 "Total usage" = "Utilisation totale";
+"claude_oauth_keychain_access_disabled" = "L’accès au Keychain est désactivé, donc CodexBar ne peut pas lire les informations de connexion de Claude.";
 "claude_oauth_keychain_access_revoked" = "L’accès au trousseau Claude a été révoqué par la rotation du jeton de Claude Code. Cliquez sur Actualiser pour accorder à nouveau l’accès, ou définissez la source d’utilisation de Claude sur CLI/Web.";
 "claude_showing_last_known_usage" = "Affichage de la dernière utilisation connue, capturée %@.";
 "claude_limited_usage_detail" = "Détails d’utilisation limités";
@@ -2515,6 +2517,10 @@
 "ak_…" = "ak_…";
 "ws_…" = "ws_…";
 
+"Plan renewal / expiry" = "Renouvellement / expiration du forfait";
+
+"Hidden by the global optional credits, spending & billing setting." = "Masqué par le réglage global des crédits facultatifs, dépenses et informations de facturation.";
+
 "Provider order updated" = "Ordre des fournisseurs mis à jour";
 "Undo" = "Annuler";
 "Clear filters" = "Effacer les filtres";
@@ -2523,3 +2529,6 @@
 "Only enabled providers" = "Fournisseurs activés uniquement";
 "Restore default order" = "Rétablir l’ordre par défaut";
 "Also restores the provider order in the menu bar. Can be undone." = "Rétablit aussi l’ordre des fournisseurs dans la barre des menus. Cette action peut être annulée.";
+
+"Auto uses an API key when configured, otherwise browser cookies." = "Auto uses an API key when configured, otherwise browser cookies.";
+"Stored in the CodexBar config file. You can also set COMMAND_CODE_API_KEY." = "Stored in the CodexBar config file. You can also set COMMAND_CODE_API_KEY.";

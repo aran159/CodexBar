@@ -9,7 +9,8 @@ read_when:
 
 CodexBar reads the dashboard APIs for Helmcode Cloud and NaN Builders through a bundled TypeScript plugin. Inference
 API keys do not provide dashboard quotas. Enable Helmcode in Settings → Providers, then sign in to the corresponding
-dashboard in Chrome. The provider is disabled by default and is not widget-selectable.
+dashboard in a supported browser. Automatic import follows the shared browser order and access gate.
+The provider is disabled by default and is not widget-selectable.
 
 | Tenant | Dashboard | API |
 | --- | --- | --- |
@@ -20,7 +21,7 @@ Automatic cookie source tries Cloud first, then NaN when no Cloud session is ava
 parse error, rate limit, or server failure stops the refresh instead of switching accounts. Sessions are cached in
 separate Keychain scopes by requested cookie domain. Cloud first tries existing sessions under the previous
 `helmcode.com` scope without importing browser cookies for that domain, then uses `cloud-api.helmcode.com` for current
-cached sessions and Chrome imports. NaN keeps its `nan.builders` scope. Rejected sessions are conditionally evicted
+cached sessions and browser imports. NaN keeps its `nan.builders` scope. Rejected sessions are conditionally evicted
 from the scope that supplied them without erasing another tenant or a newer session. The Usage Dashboard action follows the tenant of the displayed successful snapshot.
 If browser access is suppressed or denied and neither tenant succeeds, the error explains how to retry permission
 with Refresh in the provider menu or use Manual cookies. Background refreshes never request Keychain permission.

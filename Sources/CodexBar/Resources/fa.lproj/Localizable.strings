@@ -1414,6 +1414,7 @@
 "menu_bar_layout_preset_icon_only" = "فقط نماد";
 "menu_bar_layout_preset_percent_reset" = "درصد و بازنشانی";
 "menu_bar_layout_preset_compact_stacked" = "پشتهٔ فشرده";
+"menu_bar_layout_preset_bars_stacked" = "نوارهای پیشرفت انباشته";
 "menu_bar_layout_preset_custom" = "عرف";
 "menu_bar_layout_live_preview" = "پیش‌نمایش زنده";
 "menu_bar_layout_default_preview" = "پیش‌نمایش چیدمان پیش‌فرض";
@@ -1553,6 +1554,7 @@
 "5-hour usage" = "مصرف ۵ ساعته";
 "7-day usage" = "مصرف ۷ روزه";
 "Total usage" = "مصرف کل";
+"claude_oauth_keychain_access_disabled" = "دسترسی به Keychain غیرفعال است، بنابراین CodexBar نمی‌تواند اطلاعات ورود به Claude را بخواند.";
 "claude_oauth_keychain_access_revoked" = "دسترسی به Keychain کلود با چرخش توکن Claude Code لغو شد. برای اعطای مجدد دسترسی روی «تازه‌سازی» کلیک کنید، یا منبع استفاده Claude را به CLI/Web تغییر دهید.";
 "claude_showing_last_known_usage" = "آخرین میزان استفاده شناخته‌شده که در %@ ثبت شده نمایش داده می‌شود.";
 "claude_limited_usage_detail" = "جزئیات استفاده محدود است";
@@ -2520,6 +2522,10 @@
 "ak_…" = "ak_…";
 "ws_…" = "ws_…";
 
+"Plan renewal / expiry" = "تمدید / انقضای طرح";
+
+"Hidden by the global optional credits, spending & billing setting." = "با تنظیم عمومی اعتبارهای اختیاری، هزینه‌ها و صورتحساب پنهان شده است.";
+
 "Provider order updated" = "ترتیب ارائه‌دهندگان به‌روزرسانی شد";
 "Undo" = "واگرد";
 "Clear filters" = "پاک کردن فیلترها";
@@ -2528,3 +2534,6 @@
 "Only enabled providers" = "فقط ارائه‌دهندگان فعال";
 "Restore default order" = "بازیابی ترتیب پیش‌فرض";
 "Also restores the provider order in the menu bar. Can be undone." = "ترتیب ارائه‌دهندگان در نوار منو را نیز بازیابی می‌کند. قابل واگرد است.";
+
+"Auto uses an API key when configured, otherwise browser cookies." = "Auto uses an API key when configured, otherwise browser cookies.";
+"Stored in the CodexBar config file. You can also set COMMAND_CODE_API_KEY." = "Stored in the CodexBar config file. You can also set COMMAND_CODE_API_KEY.";
