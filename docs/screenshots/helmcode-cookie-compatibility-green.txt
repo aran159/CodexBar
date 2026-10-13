@@ -1,0 +1,103 @@
+# Recorded GREEN result: fixture-based compatibility tests; no live upgrade.
+􀟈  Test run started.
+􀄵  Testing Library Version: 1501
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite HelmcodeCookieCompatibilityTests started.
+􀟈  Suite HelmcodePluginTests started.
+􀟈  Test "previous Cloud cache remains usable without browser access" started.
+􀟈  Test "rejected previous Cloud cache leaves API host and NaN sessions intact" started.
+􀟈  Test "late rejection cannot remove a newer previous scope session" started.
+􀟈  Test "NaN cache remains usable when Cloud browser access is unavailable" started.
+􀟈  Test "manual tenant selection does not consume or change existing caches" started.
+􀟈  Test "NaN session stays on NaN and never requests prepaid balance" started.
+􀟈  Test "a denied Cloud import still permits a usable NaN session" started.
+􀟈  Test "rejected Cloud session is evicted before trying NaN" started.
+􀟈  Test "API host cache remains usable without a previous Cloud entry" started.
+􀟈  Test "explicit premium billing reveals rolling windows" started.
+􀟈  Test "transient Cloud errors do not switch tenants" started.
+􀟈  Test case passing 1 argument engine → .javaScriptCore to "previous Cloud cache remains usable without browser access" started.
+􀟈  Test "Cloud imports its API host session without a parent domain cookie" started.
+􀟈  Test "malformed optional credit fields do not invent a currency or balance" started.
+􀟈  Test case passing 1 argument engine → .quickJS to "rejected previous Cloud cache leaves API host and NaN sessions intact" started.
+􀟈  Test case passing 1 argument engine → .javaScriptCore to "late rejection cannot remove a newer previous scope session" started.
+􀟈  Test case passing 1 argument engine → .quickJS to "previous Cloud cache remains usable without browser access" started.
+􀟈  Test case passing 1 argument engine → .quickJS to "late rejection cannot remove a newer previous scope session" started.
+􀟈  Test "manual cookie uses only its selected tenant" started.
+􀟈  Test case passing 1 argument engine → .javaScriptCore to "rejected previous Cloud cache leaves API host and NaN sessions intact" started.
+􀟈  Test "Cloud golden preserves model resets and prepaid balance" started.
+􀟈  Test "descriptor uses the plugin and preserves cookie configuration" started.
+􀟈  Test "monthly fallback credit tokens and zero caps project honestly" started.
+􀟈  Test "quota schema drift is classified and optional failures preserve quota" started.
+􀟈  Test "Off and missing sessions fail without HTTP" started.
+􀟈  Test case passing 1 argument engine → .quickJS to "NaN cache remains usable when Cloud browser access is unavailable" started.
+􀟈  Test "missing malformed and nonboolean premium billing hides rolling tiers" started.
+􀟈  Test case passing 1 argument engine → .javaScriptCore to "NaN cache remains usable when Cloud browser access is unavailable" started.
+􀟈  Test case passing 1 argument engine → .quickJS to "NaN session stays on NaN and never requests prepaid balance" started.
+􀟈  Test case passing 2 arguments engine → .quickJS, tenant → "helmcode" to "manual tenant selection does not consume or change existing caches" started.
+􀟈  Test case passing 2 arguments engine → .quickJS, tenant → "nanBuilders" to "manual tenant selection does not consume or change existing caches" started.
+􀟈  Test case passing 1 argument engine → .javaScriptCore to "NaN session stays on NaN and never requests prepaid balance" started.
+􀟈  Test case passing 2 arguments engine → .javaScriptCore, tenant → "helmcode" to "manual tenant selection does not consume or change existing caches" started.
+􀟈  Test case passing 2 arguments engine → .javaScriptCore, tenant → "nanBuilders" to "manual tenant selection does not consume or change existing caches" started.
+􀟈  Test case passing 1 argument engine → .quickJS to "a denied Cloud import still permits a usable NaN session" started.
+􀟈  Test case passing 1 argument engine → .javaScriptCore to "a denied Cloud import still permits a usable NaN session" started.
+􀟈  Test case passing 1 argument engine → .quickJS to "API host cache remains usable without a previous Cloud entry" started.
+􀟈  Test case passing 1 argument engine → .javaScriptCore to "API host cache remains usable without a previous Cloud entry" started.
+􀟈  Test case passing 2 arguments status → 302, engine → .javaScriptCore to "rejected Cloud session is evicted before trying NaN" started.
+􀟈  Test case passing 2 arguments status → 302, engine → .quickJS to "rejected Cloud session is evicted before trying NaN" started.
+􀟈  Test case passing 2 arguments status → 401, engine → .quickJS to "rejected Cloud session is evicted before trying NaN" started.
+􀟈  Test case passing 2 arguments status → 401, engine → .javaScriptCore to "rejected Cloud session is evicted before trying NaN" started.
+􀟈  Test case passing 1 argument engine → .quickJS to "explicit premium billing reveals rolling windows" started.
+􀟈  Test case passing 2 arguments status → 403, engine → .quickJS to "rejected Cloud session is evicted before trying NaN" started.
+􀟈  Test case passing 1 argument engine → .javaScriptCore to "explicit premium billing reveals rolling windows" started.
+􀟈  Test case passing 2 arguments status → 403, engine → .javaScriptCore to "rejected Cloud session is evicted before trying NaN" started.
+􀟈  Test case passing 2 arguments status → 429, engine → .quickJS to "transient Cloud errors do not switch tenants" started.
+􀟈  Test case passing 2 arguments status → 429, engine → .javaScriptCore to "transient Cloud errors do not switch tenants" started.
+􀟈  Test case passing 2 arguments status → 500, engine → .quickJS to "transient Cloud errors do not switch tenants" started.
+􀟈  Test case passing 2 arguments status → 500, engine → .javaScriptCore to "transient Cloud errors do not switch tenants" started.
+􀟈  Test case passing 1 argument engine → .quickJS to "Cloud imports its API host session without a parent domain cookie" started.
+􀟈  Test case passing 1 argument engine → .javaScriptCore to "Cloud imports its API host session without a parent domain cookie" started.
+􀟈  Test case passing 1 argument engine → .quickJS to "manual cookie uses only its selected tenant" started.
+􀟈  Test case passing 1 argument engine → .javaScriptCore to "manual cookie uses only its selected tenant" started.
+􀟈  Test case passing 1 argument engine → .quickJS to "Cloud golden preserves model resets and prepaid balance" started.
+􀟈  Test case passing 1 argument engine → .javaScriptCore to "Cloud golden preserves model resets and prepaid balance" started.
+􀟈  Test case passing 2 arguments credits → "{"balanceMicros":12500000,"currency":12}", engine → .quickJS to "malformed optional credit fields do not invent a currency or balance" started.
+􀟈  Test case passing 1 argument engine → .quickJS to "monthly fallback credit tokens and zero caps project honestly" started.
+􀟈  Test case passing 2 arguments credits → "{"balanceMicros":12500000,"currency":12}", engine → .javaScriptCore to "malformed optional credit fields do not invent a currency or balance" started.
+􀟈  Test case passing 1 argument engine → .javaScriptCore to "monthly fallback credit tokens and zero caps project honestly" started.
+􀟈  Test case passing 1 argument engine → .quickJS to "quota schema drift is classified and optional failures preserve quota" started.
+􀟈  Test case passing 1 argument engine → .javaScriptCore to "quota schema drift is classified and optional failures preserve quota" started.
+􀟈  Test case passing 2 arguments credits → "{"balanceMicros":"12500000"}", engine → .quickJS to "malformed optional credit fields do not invent a currency or balance" started.
+􀟈  Test case passing 2 arguments credits → "{"balanceMicros":"12500000"}", engine → .javaScriptCore to "malformed optional credit fields do not invent a currency or balance" started.
+􀟈  Test case passing 2 arguments source → .off, engine → .quickJS to "Off and missing sessions fail without HTTP" started.
+􀟈  Test case passing 2 arguments source → .off, engine → .javaScriptCore to "Off and missing sessions fail without HTTP" started.
+􀟈  Test case passing 2 arguments source → .auto, engine → .quickJS to "Off and missing sessions fail without HTTP" started.
+􀟈  Test case passing 2 arguments source → .auto, engine → .javaScriptCore to "Off and missing sessions fail without HTTP" started.
+􀟈  Test case passing 2 arguments billing → "{}", engine → .quickJS to "missing malformed and nonboolean premium billing hides rolling tiers" started.
+􀟈  Test case passing 2 arguments billing → "{}", engine → .javaScriptCore to "missing malformed and nonboolean premium billing hides rolling tiers" started.
+􀟈  Test case passing 2 arguments billing → "not json", engine → .quickJS to "missing malformed and nonboolean premium billing hides rolling tiers" started.
+􀟈  Test case passing 2 arguments billing → "not json", engine → .javaScriptCore to "missing malformed and nonboolean premium billing hides rolling tiers" started.
+􀟈  Test case passing 2 arguments billing → "{"subscription":{"premium":"true"}}", engine → .quickJS to "missing malformed and nonboolean premium billing hides rolling tiers" started.
+􀟈  Test case passing 2 arguments billing → "{"subscription":{"premium":"true"}}", engine → .javaScriptCore to "missing malformed and nonboolean premium billing hides rolling tiers" started.
+􁁛  Test "descriptor uses the plugin and preserves cookie configuration" passed after 0.029 seconds.
+􁁛  Test "Cloud golden preserves model resets and prepaid balance" with 2 test cases passed after 0.041 seconds.
+􁁛  Test "Cloud imports its API host session without a parent domain cookie" with 2 test cases passed after 0.042 seconds.
+􁁛  Test "explicit premium billing reveals rolling windows" with 2 test cases passed after 0.042 seconds.
+􁁛  Test "monthly fallback credit tokens and zero caps project honestly" with 2 test cases passed after 0.044 seconds.
+􁁛  Test "rejected previous Cloud cache leaves API host and NaN sessions intact" with 2 test cases passed after 0.045 seconds.
+􁁛  Test "manual tenant selection does not consume or change existing caches" with 4 test cases passed after 0.046 seconds.
+􁁛  Test "a denied Cloud import still permits a usable NaN session" with 2 test cases passed after 0.046 seconds.
+􁁛  Test "rejected Cloud session is evicted before trying NaN" with 6 test cases passed after 0.047 seconds.
+􁁛  Test "NaN session stays on NaN and never requests prepaid balance" with 2 test cases passed after 0.049 seconds.
+􁁛  Test "transient Cloud errors do not switch tenants" with 4 test cases passed after 0.049 seconds.
+􁁛  Test "NaN cache remains usable when Cloud browser access is unavailable" with 2 test cases passed after 0.050 seconds.
+􁁛  Test "malformed optional credit fields do not invent a currency or balance" with 4 test cases passed after 0.051 seconds.
+􁁛  Test "Off and missing sessions fail without HTTP" with 4 test cases passed after 0.051 seconds.
+􁁛  Test "previous Cloud cache remains usable without browser access" with 2 test cases passed after 0.052 seconds.
+􁁛  Test "manual cookie uses only its selected tenant" with 2 test cases passed after 0.052 seconds.
+􁁛  Test "late rejection cannot remove a newer previous scope session" with 2 test cases passed after 0.052 seconds.
+􁁛  Test "API host cache remains usable without a previous Cloud entry" with 2 test cases passed after 0.053 seconds.
+􁁛  Suite HelmcodeCookieCompatibilityTests passed after 0.053 seconds.
+􁁛  Test "missing malformed and nonboolean premium billing hides rolling tiers" with 6 test cases passed after 0.053 seconds.
+􁁛  Test "quota schema drift is classified and optional failures preserve quota" with 2 test cases passed after 0.054 seconds.
+􁁛  Suite HelmcodePluginTests passed after 0.054 seconds.
+􁁛  Test run with 20 tests in 2 suites passed after 0.055 seconds.

@@ -1,0 +1,49 @@
+# Recorded RED result: fixture-based compatibility tests; no live upgrade.
+􀟈  Test run started.
+􀄵  Testing Library Version: 1501
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite HelmcodeCookieCompatibilityTests started.
+􀟈  Test "rejected previous Cloud cache leaves API host and NaN sessions intact" started.
+􀟈  Test "manual tenant selection does not consume or change existing caches" started.
+􀟈  Test "NaN cache remains usable when Cloud browser access is unavailable" started.
+􀟈  Test "late rejection cannot remove a newer previous scope session" started.
+􀟈  Test "API host cache remains usable without a previous Cloud entry" started.
+􀟈  Test case passing 1 argument engine → .quickJS to "rejected previous Cloud cache leaves API host and NaN sessions intact" started.
+􀟈  Test case passing 1 argument engine → .quickJS to "NaN cache remains usable when Cloud browser access is unavailable" started.
+􀟈  Test "previous Cloud cache remains usable without browser access" started.
+􀟈  Test case passing 1 argument engine → .javaScriptCore to "rejected previous Cloud cache leaves API host and NaN sessions intact" started.
+􀟈  Test case passing 1 argument engine → .quickJS to "API host cache remains usable without a previous Cloud entry" started.
+􀟈  Test case passing 2 arguments engine → .quickJS, tenant → "helmcode" to "manual tenant selection does not consume or change existing caches" started.
+􀟈  Test case passing 2 arguments engine → .quickJS, tenant → "nanBuilders" to "manual tenant selection does not consume or change existing caches" started.
+􀟈  Test case passing 1 argument engine → .javaScriptCore to "NaN cache remains usable when Cloud browser access is unavailable" started.
+􀟈  Test case passing 2 arguments engine → .javaScriptCore, tenant → "helmcode" to "manual tenant selection does not consume or change existing caches" started.
+􀟈  Test case passing 2 arguments engine → .javaScriptCore, tenant → "nanBuilders" to "manual tenant selection does not consume or change existing caches" started.
+􀟈  Test case passing 1 argument engine → .javaScriptCore to "API host cache remains usable without a previous Cloud entry" started.
+􀟈  Test case passing 1 argument engine → .quickJS to "late rejection cannot remove a newer previous scope session" started.
+􀟈  Test case passing 1 argument engine → .javaScriptCore to "previous Cloud cache remains usable without browser access" started.
+􀟈  Test case passing 1 argument engine → .javaScriptCore to "late rejection cannot remove a newer previous scope session" started.
+􀟈  Test case passing 1 argument engine → .quickJS to "previous Cloud cache remains usable without browser access" started.
+􀢄  Test "late rejection cannot remove a newer previous scope session" recorded an issue with 1 argument engine → .javaScriptCore at HelmcodeCookieCompatibilityTests.swift:73:13: Expectation failed: (Self.cached("helmcode.com")?.cookieHeader → "<redacted-test-cookie>") == "<redacted-test-cookie>"
+􀢄  Test "previous Cloud cache remains usable without browser access" recorded an issue with 1 argument engine → .javaScriptCore at HelmcodeCookieCompatibilityTests.swift:18:13: Expectation failed: (result.usage.identity?.accountOrganization → "NaN Builders") == "Helmcode Cloud"
+􀢄  Test "rejected previous Cloud cache leaves API host and NaN sessions intact" recorded an issue with 1 argument engine → .javaScriptCore at HelmcodeCookieCompatibilityTests.swift:45:13: Expectation failed: (result.requests.count → 3) == 4
+􀢄  Test "previous Cloud cache remains usable without browser access" recorded an issue with 1 argument engine → .javaScriptCore at HelmcodeCookieCompatibilityTests.swift:19:13: Expectation failed: (result.requests.count → 2) == 3
+􀢄  Test "previous Cloud cache remains usable without browser access" recorded an issue with 1 argument engine → .javaScriptCore at HelmcodeCookieCompatibilityTests.swift:20:13: Expectation failed: result.requests.allSatisfy { $0.url?.host == "cloud-api.helmcode.com" }
+􀢄  Test "previous Cloud cache remains usable without browser access" recorded an issue with 1 argument engine → .javaScriptCore at HelmcodeCookieCompatibilityTests.swift:21:13: Expectation failed: result.requests.allSatisfy { $0.value(forHTTPHeaderField: "Cookie") == cloud.cookieHeader }
+􀢄  Test "rejected previous Cloud cache leaves API host and NaN sessions intact" recorded an issue with 1 argument engine → .quickJS at HelmcodeCookieCompatibilityTests.swift:45:13: Expectation failed: (result.requests.count → 3) == 4
+􁁛  Test "API host cache remains usable without a previous Cloud entry" with 2 test cases passed after 0.026 seconds.
+􀢄  Test "late rejection cannot remove a newer previous scope session" recorded an issue with 1 argument engine → .quickJS at HelmcodeCookieCompatibilityTests.swift:73:13: Expectation failed: (Self.cached("helmcode.com")?.cookieHeader → "<redacted-test-cookie>") == "<redacted-test-cookie>"
+􀢄  Test "previous Cloud cache remains usable without browser access" recorded an issue with 1 argument engine → .quickJS at HelmcodeCookieCompatibilityTests.swift:18:13: Expectation failed: (result.usage.identity?.accountOrganization → "NaN Builders") == "Helmcode Cloud"
+􀢄  Test "previous Cloud cache remains usable without browser access" recorded an issue with 1 argument engine → .quickJS at HelmcodeCookieCompatibilityTests.swift:19:13: Expectation failed: (result.requests.count → 2) == 3
+􀢄  Test "previous Cloud cache remains usable without browser access" recorded an issue with 1 argument engine → .quickJS at HelmcodeCookieCompatibilityTests.swift:20:13: Expectation failed: result.requests.allSatisfy { $0.url?.host == "cloud-api.helmcode.com" }
+􀢄  Test "late rejection cannot remove a newer previous scope session" with 2 test cases failed after 0.027 seconds with 2 issues.
+􀢄  Test "previous Cloud cache remains usable without browser access" recorded an issue with 1 argument engine → .quickJS at HelmcodeCookieCompatibilityTests.swift:21:13: Expectation failed: result.requests.allSatisfy { $0.value(forHTTPHeaderField: "Cookie") == cloud.cookieHeader }
+􁁛  Test "manual tenant selection does not consume or change existing caches" with 4 test cases passed after 0.027 seconds.
+􀢄  Test "previous Cloud cache remains usable without browser access" recorded an issue with 1 argument engine → .quickJS at HelmcodeCookieCompatibilityTests.swift:22:13: Expectation failed: (imports.value → ["cloud-api.helmcode.com"]).isEmpty → false
+􀢄  Test "previous Cloud cache remains usable without browser access" recorded an issue with 1 argument engine → .javaScriptCore at HelmcodeCookieCompatibilityTests.swift:22:13: Expectation failed: (imports.value → ["cloud-api.helmcode.com"]).isEmpty → false
+􁁛  Test "NaN cache remains usable when Cloud browser access is unavailable" with 2 test cases passed after 0.027 seconds.
+􀢄  Test "previous Cloud cache remains usable without browser access" with 2 test cases failed after 0.027 seconds with 10 issues.
+􀢄  Test "rejected previous Cloud cache leaves API host and NaN sessions intact" recorded an issue with 1 argument engine → .quickJS at HelmcodeCookieCompatibilityTests.swift:48:13: Expectation failed: (Self.cached("helmcode.com") → CookieHeaderCacheEntry(cookieHeader: "<redacted-test-cookie>", storedAt: 2026-09-10 00:26:40 +0000, sourceLabel: "Synthetic cached session", authenticationFailurePolicy: nil)) == nil
+􀢄  Test "rejected previous Cloud cache leaves API host and NaN sessions intact" recorded an issue with 1 argument engine → .javaScriptCore at HelmcodeCookieCompatibilityTests.swift:48:13: Expectation failed: (Self.cached("helmcode.com") → CookieHeaderCacheEntry(cookieHeader: "<redacted-test-cookie>", storedAt: 2026-09-10 00:26:40 +0000, sourceLabel: "Synthetic cached session", authenticationFailurePolicy: nil)) == nil
+􀢄  Test "rejected previous Cloud cache leaves API host and NaN sessions intact" with 2 test cases failed after 0.033 seconds with 4 issues.
+􀢄  Suite HelmcodeCookieCompatibilityTests failed after 0.034 seconds with 16 issues.
+􀢄  Test run with 6 tests in 1 suite failed after 0.034 seconds with 16 issues.
