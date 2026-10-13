@@ -32,7 +32,7 @@ defineProvider({
   endpoints: ["https://cloud-api.helmcode.com", "https://cloud-api.nan.builders"],
   settings: [{ key: "TENANT", title: "Manual cookie tenant", type: "plain" }],
   capabilities: ["browser-cookies", "http-status"],
-  cookieDomains: ["cloud-api.helmcode.com", "nan.builders"],
+  cookieDomains: ["helmcode.com", "cloud-api.helmcode.com", "nan.builders"],
   async fetchUsage(ctx) {
     const tenants = [
       { domain: "helmcode.com", cookieDomain: "cloud-api.helmcode.com", name: "Helmcode Cloud" },
@@ -77,17 +77,28 @@ defineProvider({
       if (response.status < 200 || response.status >= 300)
         throw ctx.fail.apiFailure(`Helmcode dashboard returned HTTP ${response.status}.`);
     };
-    let rejected = false;
-    for (const tenant of candidates) {
-      let cookie;
-      try {
-        cookie = await ctx.browser.cookieHeader(tenant.cookieDomain);
-      } catch (error) {
-        void error;
-        continue;
+    async function* sessions() {
+      for (const tenant of candidates) {
+        const domains =
+          policy !== "manual" && tenant.domain !== tenant.cookieDomain
+            ? [tenant.domain, tenant.cookieDomain]
+            : [tenant.cookieDomain];
+        for (const domain of domains) {
+          try {
+            for await (const session of ctx.browser.sessions(domain, { cachedOnly: domain !== tenant.cookieDomain })) {
+              yield { tenant, domain, session };
+            }
+          } catch (error) {
+            void error;
+          }
+        }
       }
+    }
+    let rejected = false;
+    for await (const { tenant, domain, session } of sessions()) {
+      if (!session.header) continue;
       const headers = {
-        Cookie: cookie,
+        Cookie: session.header,
         Origin: `https://cloud.${tenant.domain}`,
         Referer: `https://cloud.${tenant.domain}/dashboard`,
       };
@@ -95,7 +106,7 @@ defineProvider({
         ctx.http.get(`https://cloud-api.${tenant.domain}${path}`, { headers, timeoutSeconds });
       const response = await get("/api/usage/quota");
       if ((response.status >= 300 && response.status < 400) || response.status === 401 || response.status === 403) {
-        ctx.browser.rejectCookie(tenant.cookieDomain);
+        ctx.browser.rejectCookie(domain, session);
         rejected = true;
         continue;
       }
