@@ -107,5 +107,7 @@ enum ProviderImplementationManifest {
         PluginAPIKeyProviderImplementation(spec: SofyaProviderDescriptor.spec),
         PluginAPIKeyProviderImplementation(spec: FalProviderDescriptor.spec),
         PluginAPIKeyProviderImplementation(spec: FloraProviderDescriptor.spec),
+        PluginCookieProviderImplementation(spec: ParallelProviderDescriptor.spec),
+        PluginCookieProviderImplementation(spec: ClaudePlatformProviderDescriptor.spec),
     ]
 }

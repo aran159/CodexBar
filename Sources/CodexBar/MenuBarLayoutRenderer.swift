@@ -84,6 +84,8 @@ struct MenuBarLayoutRenderData: Hashable {
     let automaticPace: String?
     let runsOut: String?
     let balance: String?
+    var tokensPerMinute: Int?
+    var tokensSparkline: MenuBarTokensSparkline?
     let costToday: String?
     let cost30d: String?
     /// Numeric twins of the display strings above, for conditional predicates.
@@ -125,6 +127,7 @@ struct MenuBarLayoutRenderExtra: Hashable {
 
 struct MenuBarLayoutRenderOptions: Hashable {
     let size: MenuBarLayoutSize
+    let monospacedDigits: Bool
     let colorPace: Bool
     let colorByProvider: Bool
     let highContrast: Bool
@@ -161,9 +164,11 @@ struct MenuBarLayoutRenderOptions: Hashable {
         verticalAdjustment: Int = 0,
         colorPace: Bool = false,
         colorByProvider: Bool = false,
-        forceStackedStyle: Bool = false)
+        forceStackedStyle: Bool = false,
+        monospacedDigits: Bool = false)
     {
         self.size = size
+        self.monospacedDigits = monospacedDigits
         self.colorPace = colorPace
         self.colorByProvider = colorByProvider
         self.highContrast = highContrast
@@ -183,6 +188,7 @@ struct MenuBarLayoutRenderKey: Hashable {
     let layout: MenuBarLayout
     let data: MenuBarLayoutRenderData
     let size: MenuBarLayoutSize
+    let monospacedDigits: Bool
     let colorPace: Bool
     let colorByProvider: Bool
     let highContrast: Bool
@@ -322,6 +328,7 @@ final class MenuBarLayoutRenderer {
             layout: layout,
             data: data,
             size: options.size,
+            monospacedDigits: options.monospacedDigits,
             colorPace: options.colorPace,
             colorByProvider: options.colorByProvider,
             highContrast: options.highContrast,
@@ -430,7 +437,10 @@ final class MenuBarLayoutRenderer {
         Self.removeDuplicateBalanceResets(from: &renderedLines, data: data)
 
         let isStacked = options.forceStackedStyle || renderedLines.count == 2
-        let font = NSFont.systemFont(ofSize: Self.fontSize(size: options.size, isStacked: isStacked))
+        let fontSize = Self.fontSize(size: options.size, isStacked: isStacked)
+        let font = options.monospacedDigits
+            ? NSFont.monospacedDigitSystemFont(ofSize: fontSize, weight: .regular)
+            : NSFont.systemFont(ofSize: fontSize)
         let providerTintColor = Self.effectiveProviderTintColor(for: data.provider, options: options)
         let foregroundColor = if let providerTintColor {
             providerTintColor
@@ -444,8 +454,9 @@ final class MenuBarLayoutRenderer {
         let isTintActive = providerTintColor != nil
         let paragraphStyle = NSMutableParagraphStyle()
         if isStacked {
-            paragraphStyle.minimumLineHeight = 9.5
-            paragraphStyle.maximumLineHeight = 9.5
+            let lineHeight: CGFloat = options.size == .large ? 11 : 9.5
+            paragraphStyle.minimumLineHeight = lineHeight
+            paragraphStyle.maximumLineHeight = lineHeight
             paragraphStyle.lineSpacing = -1
         }
         var attributes: [NSAttributedString.Key: Any] = [
@@ -474,6 +485,13 @@ final class MenuBarLayoutRenderer {
             icon.map { Self.offsetLeadingIcon($0, adjustment: options.verticalAdjustment) }
         } else {
             nil
+        }
+
+        if isStacked, options.size == .large, leadingIcon == nil, icon != nil,
+           renderedLines.joined().contains(.icon)
+        {
+            // Inline attachments need less baseline lowering to fit both rows in the 22pt status bar.
+            attributes[.baselineOffset] = Self.stackedBaselineOffset + 2 + CGFloat(options.verticalAdjustment)
         }
 
         for (lineIndex, renderedLine) in renderedLines.enumerated() {
@@ -661,6 +679,9 @@ final class MenuBarLayoutRenderer {
         {
             return rendered
         }
+        if let rendered = self.renderThroughputItem(item, data: data, style: style, options: options) {
+            return rendered
+        }
         if let rendered = self.renderUsageMeterItem(
             item,
             data: data,
@@ -764,8 +785,8 @@ final class MenuBarLayoutRenderer {
                 self.missingValue,
                 accessibilityText: L("menu_bar_layout_conditional_unavailable"),
                 attributes: style.attributes)
-        case .providerName, .accountLabel, .lanePercent, .extraPercent:
-            preconditionFailure("Provider text tokens should render before the main switch")
+        case .providerName, .accountLabel, .lanePercent, .extraPercent, .tokensPerMinute, .tokensSparkline:
+            preconditionFailure("Provider text and throughput tokens should render before the main switch")
         case .usageBar, .progressBar:
             preconditionFailure("Usage meter tokens should render before the main switch")
         }
@@ -1165,12 +1186,22 @@ final class MenuBarLayoutRenderer {
         guard minutes.isMultiple(of: 60) else { return "\(minutes)m" }
         return "\(minutes / 60)h"
     }
+}
 
+extension MenuBarLayoutRenderer {
     private static func fontSize(size: MenuBarLayoutSize, isStacked: Bool) -> CGFloat {
         if isStacked {
-            return size == .small ? 8 : 9
+            return switch size {
+            case .small: 8
+            case .regular: 9
+            case .large: 10
+            }
         }
-        return size == .small ? 11 : NSFont.systemFontSize
+        return switch size {
+        case .small: 11
+        case .regular: NSFont.systemFontSize
+        case .large: 14
+        }
     }
 
     private static func iconHeight(size: MenuBarLayoutSize, isStacked: Bool) -> CGFloat {
@@ -1179,9 +1210,54 @@ final class MenuBarLayoutRenderer {
         }
         return size == .small ? 14 : 18
     }
-}
 
-extension MenuBarLayoutRenderer {
+    /// Tokens-per-minute text and graph, kept out of the class body's main switch.
+    private static func renderThroughputItem(
+        _ item: MenuBarLayoutToken,
+        data: MenuBarLayoutRenderData,
+        style: TokenStyle,
+        options: MenuBarLayoutRenderOptions)
+        -> (value: NSAttributedString, accessibilityText: String?)?
+    {
+        switch item {
+        case .tokensPerMinute:
+            self.optionalTextToken(
+                data.tokensPerMinute.map { ProviderThroughputSection.count($0) + "/min" },
+                unavailableLabel: L("%@ unavailable", L("Tokens / min")),
+                attributes: style.attributes)
+        case .tokensSparkline:
+            self.sparklineToken(data: data, style: style, options: options)
+        default:
+            nil
+        }
+    }
+
+    private static func sparklineToken(
+        data: MenuBarLayoutRenderData,
+        style: TokenStyle,
+        options: MenuBarLayoutRenderOptions)
+        -> (value: NSAttributedString, accessibilityText: String?)
+    {
+        guard let graph = data.tokensSparkline,
+              let image = graph.image(height: style.iconHeight, highlighted: options.isHighlighted)
+        else {
+            return self.textToken(
+                self.missingValue,
+                accessibilityText: L("%@ unavailable", L("Tokens / min graph")),
+                attributes: style.attributes)
+        }
+        let attachment = NSTextAttachment()
+        attachment.image = Self.attachmentImage(image, tint: style.foregroundColor)
+        attachment.bounds = NSRect(
+            x: 0,
+            y: ((style.font.capHeight - style.iconHeight) / 2).rounded(),
+            width: image.size.width,
+            height: style.iconHeight)
+        let value = NSMutableAttributedString(attachment: attachment)
+        value.addAttributes(style.attributes, range: NSRange(location: 0, length: value.length))
+        return (value, L("Tokens per minute, latest %@", graph.latest.map(ProviderThroughputSection.count) ?? "—"))
+    }
+
     /// Provider-declared menu bar tag for a lane; nil keeps the lane's percentage bare.
     private static func laneShortLabel(_ lane: MenuBarLayoutLane, provider: UsageProvider) -> String? {
         let labels = ProviderDescriptorRegistry.descriptor(for: provider).menuBarMetrics.laneShortLabels

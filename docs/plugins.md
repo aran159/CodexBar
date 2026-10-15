@@ -72,6 +72,10 @@ See [WorkBuddy](workbuddy.md) for the request contract, bounded optional reset l
 [X API](xapi.md) uses the same cookie host with a bundled `ct0` header echo for account discovery and developer-console
 credits. Its script preserves dollar balances and debt without receiving cookie values or adding a native fetcher.
 
+[Claude Platform](claudeplatform.md) sends the opaque `sessionKey` cookie through the same cookie host, so its script
+never sees cookie values. It lists organizations, then reads required `prepaid/credits` (a 403 tries the next API
+organization) and optional `current_spend`, whose failures keep the balance. Both plugin engines run it.
+
 Manus, Muse (muse.ai), Perplexity, Hyper, Raycast, Sakana, and T3 Chat use the shared app implementation. Helmcode retains its tenant
 picker/snapshot, and Qoder retains its regional dashboard action and source-label adapter while sharing cookie UI.
 Provider-owned values resolvers retain token normalization and captured-header allowlists. Replicate and TypeSafe
@@ -315,6 +319,10 @@ engine; the same rollback is available in **Settings → Debug → Provider Plug
 CodexBar. JavaScriptCore has no public interrupt API, so a timed-out rollback-engine context is discarded but its
 abandoned evaluation thread can remain alive until process exit.
 
+QuickJS worker jobs drain autoreleased host objects when they finish, preventing refresh temporaries from building up
+across a plugin's lifetime. JavaScriptCore registration and completed-fetch callbacks do not keep retired runtimes or
+contexts alive; active evaluations and the existing fetch watchdog still determine when cleanup can finish.
+
 ## Snapshot result
 
 Return at least one rate window, cost object, detail section, or non-empty identity field:
@@ -371,6 +379,14 @@ every key. Null, arrays, wrong types, unknown keys, and cross-provider requests 
 Card payloads are descriptor-owned, never arbitrary Swift decoding. OpenAI's `card.openAIAPIUsage` adapter accepts daily
 cost, token, request, model, and line-item history for the existing native chart. It rejects unknown fields, bounds the
 history to 366 buckets and 10,000 breakdown entries, and validates finite numbers, safe integer counts, names, and dates.
+An optional `live` object contains `windowMinutes: 60`, Unix-second `startTime` and `fetchedAt`, and `buckets`
+with `startTime` and `models` (`name`, `inputTokens`, `cachedInputTokens`, `outputTokens`, `requests`, optional `batchTokens` and
+`batchRequests`). The batch fields default to 0 when missing, must be nonnegative integers, and must not exceed
+`inputTokens + outputTokens` and `requests`, respectively. Batch API subsets are excluded only from rate-limit
+utilization; charts and totals include all traffic. Both QuickJS
+and JavaScriptCore validate this payload. It accepts at most 60 buckets and 200 models per bucket, sharing the
+10,000-entry budget with daily breakdowns. Invalid live data drops only throughput; daily data remains valid.
+The Swift window fetcher and plugin adapter share the same zero-filled minute grid and reporting frontier.
 No other provider or user-installed plugin receives that adapter by declaring a card field.
 
 Fireworks alone allows `persist: { ACCOUNT_SLUG: "discovered-slug" }`. The app/CLI writer rechecks ownership, applies the
@@ -605,3 +621,7 @@ outage rather than a parse failure, so the last good balance stays visible.
 [FLORA](flora.md) reads one workspace's available USD balance and UTC month-to-date spend with a bearer API key
 that holds billing permission. Its explicit workspace ID also supports keys whose workspace list is empty
 because they lack read permission. Unavailable spend keeps its documented reason instead of becoming zero.
+
+[Parallel](parallel.md) reads the prepaid credit balance through the shared cookie host with a session-cookie POST
+to the platform dashboard's internal balance endpoint. Parallel API keys cannot read the balance, and its Account API
+needs OAuth, so the provider is web-only. A changed response shape fails parsing instead of reporting zero.

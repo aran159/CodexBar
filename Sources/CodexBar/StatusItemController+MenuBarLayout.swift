@@ -190,7 +190,8 @@ extension StatusItemController {
             verticalAdjustment: self.settings.menuBarLayoutVerticalAdjustment,
             colorPace: self.settings.menuBarColorPace,
             colorByProvider: self.settings.menuBarColorByProvider,
-            forceStackedStyle: forceStackedStyle)
+            forceStackedStyle: forceStackedStyle,
+            monospacedDigits: self.settings.menuBarLayoutMonospacedDigits)
     }
 
     func menuBarLayoutRenderData(
@@ -400,6 +401,8 @@ extension UsageStore {
                 snapshot: snapshot,
                 codexCredits: codexCredits,
                 showsOptionalCredits: self.settings.showOptionalCreditsAndExtraUsage),
+            tokensPerMinute: snapshot?.throughput?.latestTokensPerMinute,
+            tokensSparkline: snapshot?.throughput.map { MenuBarTokensSparkline(minutes: $0.minutes) },
             costToday: costs.today,
             cost30d: costs.last30Days,
             metrics: MenuBarLayoutRenderMetrics(

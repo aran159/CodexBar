@@ -8,7 +8,7 @@ read_when:
 
 # Providers
 
-CodexBar currently registers 102 provider IDs. Some companies expose multiple surfaces, such as Codex vs OpenAI API or
+CodexBar currently registers 104 provider IDs. Some companies expose multiple surfaces, such as Codex vs OpenAI API or
 OpenCode vs OpenCode Go, because the auth source and quota shape differ.
 
 ## Fetch strategies (current)
@@ -134,7 +134,7 @@ complete when the available scan window covers fewer days.
 | Codebuff | API token from config/env or `codebuff login` credentials → usage API (`api`). |
 | Venice | Auto/API: API key from config/env → DIEM/USD balance (`api`). Explicit Web: browser or manual cookies → subscription credit details (`web`). |
 | Command Code | Web billing API via Command Code session cookies (`web`). |
-| Venice | Auto/API: API key from config/env → DIEM/USD balance (`api`). Explicit Web: Chrome or manual cookies → subscription credit details (`web`). |
+| Venice | Auto/API: API key from config/env → DIEM/USD balance (`api`). Explicit Web: browser or manual cookies → subscription credit details (`web`). |
 | Command Code | Billing API via API key when configured, otherwise session cookies (`auto`); explicit `api`/`web` pins the source. |
 | ClinePass | API key from config/env or labeled API-key accounts, then the existing `cline auth` session file → 5-hour, weekly, and monthly subscription usage limits (`api`). |
 | Qoder | Browser or manual cookies → big model credit usage (`web`). |
@@ -180,6 +180,8 @@ complete when the available scan window covers fewer days.
 | [Sofya](sofya.md) | API key for separate account plan and purchased credit balances, eligibility, and the reported monthly reset. |
 | [fal](fal.md) | API key with billing read access for the current account credit balance. |
 | [FLORA](flora.md) | API key with billing permission plus a workspace ID for the available USD balance and month-to-date spend. |
+| [Parallel](parallel.md) | Browser session on platform.parallel.ai for the prepaid credit balance and pending debit. |
+| [Claude Platform](claudeplatform.md) | Browser or manual platform.claude.com session cookies for Console API credit balance, expiring credit grants, and month-to-date spend. |
 
 <!-- End generated provider additions -->
 
@@ -218,6 +220,18 @@ complete when the available scan window covers fewer days.
   local-agent JSONL files for the configured history window.
 - Status: Statuspage.io (Anthropic).
 - Details: `docs/claude.md`.
+
+## Claude Platform
+- Browser `sessionKey` cookie for `platform.claude.com` (default browser order, since there is no per-provider
+  browser-list setting), or a manual Cookie header.
+- Reads the undocumented Claude Console billing endpoints with your platform.claude.com browser session:
+  `/api/organizations`, then `prepaid/credits` (required) for each organization with the `api` capability until one
+  is readable (HTTP 403 tries the next), then `current_spend` (optional) for that organization.
+- Cookies are required because the Anthropic Admin API is unavailable for individual Console accounts.
+- Shows the total prepaid API credit balance, expiring subscription and purchased credit grants, and month-to-date
+  spend as a Billing detail row.
+- Status: Statuspage.io (Anthropic).
+- Details: `docs/claudeplatform.md`.
 
 ## z.ai
 - API token from `~/.codexbar/config.json` (`providers[].apiKey`) or `Z_AI_API_KEY` env var.
