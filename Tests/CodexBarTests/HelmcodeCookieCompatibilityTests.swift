@@ -91,7 +91,7 @@ struct HelmcodeCookieCompatibilityTests {
             #expect(result.requests.count == 2)
             #expect(result.requests.allSatisfy { $0.url?.host == "cloud-api.nan.builders" })
             #expect(result.requests.allSatisfy { $0.value(forHTTPHeaderField: "Cookie") == nan.cookieHeader })
-            #expect(imports.value == ["cloud-api.helmcode.com"])
+            #expect(imports.value == ["cloud-api.helmcode.com", "helmcode.com"])
             #expect(Self.cached("nan.builders")?.cookieHeader == nan.cookieHeader)
         }
     }

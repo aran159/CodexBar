@@ -33,33 +33,18 @@ defineProvider({
       if (typeof value !== "number" || !Number.isSafeInteger(value) || value < 0) return fail(field);
       return value;
     };
-    const date = (value: unknown): Date | undefined => {
-      if (typeof value !== "string") return undefined;
-      try {
-        return ctx.date.iso(value);
-      } catch (error) {
-        void error;
-        return undefined;
-      }
-    };
-    const validate = (response: CodexBarHTTPTextResponse): void => {
-      const seconds = Number(response.headers["retry-after"] ?? 1);
-      const retryAfterSeconds = Number.isFinite(seconds) && seconds >= 0 ? Math.min(10, seconds) : 1;
-      if (response.status === 429) throw ctx.fail.rateLimited("Helmcode rate limit reached.", { retryAfterSeconds });
-      if (response.status === 408 || response.status >= 500)
-        throw ctx.fail.providerUnavailable("Helmcode dashboard is unavailable.", { retryAfterSeconds });
-      if (response.status < 200 || response.status >= 300)
-        throw ctx.fail.apiFailure(`Helmcode dashboard returned HTTP ${response.status}.`);
-    };
     async function* sessions() {
       for (const tenant of candidates) {
         const domains =
           policy !== "manual" && tenant.domain !== tenant.cookieDomain
-            ? [tenant.domain, tenant.cookieDomain]
+            ? [tenant.domain, tenant.cookieDomain, tenant.domain]
             : [tenant.cookieDomain];
-        for (const domain of domains) {
+        // Try the old cache first, then API-host and parent-domain browser sessions.
+        for (const [index, domain] of domains.entries()) {
           try {
-            for await (const session of ctx.browser.sessions(domain, { cachedOnly: domain !== tenant.cookieDomain })) {
+            for await (const session of ctx.browser.sessions(domain, {
+              cachedOnly: domains.length > 1 && index === 0,
+            })) {
               yield { tenant, domain, session };
             }
           } catch (error) {
@@ -84,7 +69,13 @@ defineProvider({
         rejected = true;
         continue;
       }
-      validate(response);
+      const seconds = Number(response.headers["retry-after"] ?? 1);
+      const retryAfterSeconds = Number.isFinite(seconds) && seconds >= 0 ? Math.min(10, seconds) : 1;
+      if (response.status === 429) throw ctx.fail.rateLimited("Helmcode rate limit reached.", { retryAfterSeconds });
+      if (response.status === 408 || response.status >= 500)
+        throw ctx.fail.providerUnavailable("Helmcode dashboard is unavailable.", { retryAfterSeconds });
+      if (response.status < 200 || response.status >= 300)
+        throw ctx.fail.apiFailure(`Helmcode dashboard returned HTTP ${response.status}.`);
       const quota = parse(response.bodyText);
       if (typeof quota.periodStart !== "string" || !Array.isArray(quota.models)) return fail("periodStart or models");
       const optional = async (path: string): Promise<Record<string, unknown> | undefined> => {
@@ -112,7 +103,15 @@ defineProvider({
           const credit = row.creditTokens == null ? 0 : integer(row.creditTokens, "creditTokens");
           const hours = row.windowHours == null ? undefined : integer(row.windowHours, "windowHours");
           if (hours !== undefined && (hours < 1 || hours > 525600 / 60)) return fail("windowHours");
-          return { name: row.model, cap, used, credit, hours, resetsAt: date(row.periodEnd) ?? fallback };
+          let resetsAt = fallback;
+          if (typeof row.periodEnd === "string") {
+            try {
+              resetsAt = ctx.date.iso(row.periodEnd) ?? fallback;
+            } catch (error) {
+              void error;
+            }
+          }
+          return { name: row.model, cap, used, credit, hours, resetsAt };
         })
         .filter((row) => row.cap > 0 && (row.hours === undefined || premium));
       models.sort((a, b) => b.used / b.cap - a.used / a.cap || (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
